@@ -1,13 +1,13 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/db.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
     sendJSON(['error' => 'Unauthorized'], 401);
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['id'])) {
     sendJSON(['error' => 'Missing inventory ID'], 400);
