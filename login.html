@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Explosive Burger</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .login-container {
+      width: 400px;
+      max-width: 90vw;
+      background: rgba(26, 26, 26, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid #ff4757;
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-container h2 {
+      color: #ff4757;
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .login-container p {
+      color: #999;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: 2px solid #ff4757;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: all 0.3s;
+    }
+
+    .login-container input::placeholder {
+      color: #999;
+    }
+
+    .login-container input:focus {
+      outline: none;
+      border-color: #ff3838;
+      background: rgba(255, 71, 87, 0.1);
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+    }
+
+    .login-btn {
+      background: linear-gradient(45deg, #ff4757, #ff3838);
+      color: white;
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 71, 87, 0.5);
+      background: linear-gradient(45deg, #ff3838, #e83e50);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      background: rgba(255, 71, 87, 0.2);
+      color: #ff9599;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      display: none;
+      border-left: 4px solid #ff4757;
+      font-size: 14px;
+      animation: shake 0.3s ease;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .success-message {
+      background: rgba(46, 213, 115, 0.2);
+      color: #7dea9f;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      display: none;
+      border-left: 4px solid #2ed573;
+      font-size: 14px;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .register-link {
+      color: #ff4757;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    .register-link:hover {
+      color: #ff3838;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: inline-block;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+    }
+
+    .home-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-credentials {
+      background: rgba(255, 71, 87, 0.05);
+      border: 1px solid rgba(255, 71, 87, 0.3);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .demo-credentials strong {
+      color: #ff4757;
+    }
+
+    .loader {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .loader.show {
+      display: block;
+    }
+
+    .spinner {
+      border: 3px solid rgba(255, 71, 87, 0.3);
+      border-top: 3px solid #ff4757;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .logo-section {
+      margin-bottom: 30px;
+    }
+
+    .logo-section .emoji {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .logo-section .brand-name {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="index.html" class="home-btn">← Back to Home</a>
+
+  <div class="login-container">
+
+    <div class="logo-section">
+      <div class="emoji">🍔</div>
+      <div class="brand-name">EXPLOSIVE BURGER</div>
+      <p style="color: #ff4757; margin: 5px 0 0; font-size: 12px; letter-spacing: 1px;">ADMIN LOGIN</p>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="successMessage" class="success-message"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <input 
+        type="text" 
+        id="username" 
+        placeholder="Username" 
+        required
+        autocomplete="username"
+      >
+
+      <input 
+        type="password" 
+        id="password" 
+        placeholder="Password" 
+        required
+        autocomplete="current-password"
+      >
+
+      <button type="submit" class="login-btn" id="loginBtn">
+        Login
+      </button>
+
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+      </div>
+    </form>
+
+    <div class="demo-credentials">
+      <strong>Demo Credentials:</strong><br>
+      Username: <strong>admin</strong><br>
+      Password: <strong>admin123</strong>
+    </div>
+
+    <p style="margin-top: 20px; color: #999; font-size: 14px;">
+      Don't have an account? 
+      <a href="register.html" class="register-link">Register here</a>
+    </p>
+
+  </div>
+
+  <script>
+    // ========================================
+    // LOGIN HANDLER - Connects to PHP API
+    // ========================================
+
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMessage');
+      const successMsg = document.getElementById('successMessage');
+      const loginBtn = document.getElementById('loginBtn');
+      const loader = document.getElementById('loader');
+
+      // Reset messages
+      errorMsg.classList.remove('show');
+      successMsg.classList.remove('show');
+
+      // Validation
+      if (!username || !password) {
+        showError('Please fill in all fields');
+        return;
+      }
+
+      if (password.length < 3) {
+        showError('Password must be at least 3 characters');
+        return;
+      }
+
+      // Show loader
+      loader.classList.add('show');
+      loginBtn.disabled = true;
+
+      try {
+        // Send login request to PHP API
+        const response = await fetch('api/auth/login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Show success message
+          showSuccess('Login successful! Redirecting...');
+          
+          // Redirect to admin dashboard after 1 second
+          setTimeout(() => {
+            window.location.href = 'admin/dashboard.html';
+          }, 1000);
+        } else {
+          showError(data.error || 'Login failed');
+          loader.classList.remove('show');
+          loginBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError('Connection error. Please try again.');
+        loader.classList.remove('show');
+        loginBtn.disabled = false;
+      }
+    }
+
+    function showError(message) {
+      const errorMsg = document.getElementById('errorMessage');
+      errorMsg.textContent = message;
+      errorMsg.classList.add('show');
+    }
+
+    function showSuccess(message) {
+      const successMsg = document.getElementById('successMessage');
+      successMsg.textContent = message;
+      successMsg.classList.add('show');
+    }
+
+    // Keyboard shortcut: Enter to login
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+      }
+    });
+  </script>
+
+</body>
+
+</html>

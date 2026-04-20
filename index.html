@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explosive Burger - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .sold-out {
+      color: #ff4757;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+  <script src="js/cart.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<img src="logo.jpg" alt="Explosive Burger Logo" class="logo">
+
+<button class="hamburger" onclick="toggleMenu()">☰</button>
+
+<ul id="nav-menu">
+<li><a href="#"> Home</a></li>
+<li><a href="#menu"> Menu</a></li>
+<li><a href="blog.html"> Blog</a></li>
+<li><a href="login.html"> Admin</a></li>
+<li><button onclick="openCart()" class="cart-icon"> Cart (<span id="cartCount">0</span>)</button></li>
+</ul>
+
+</nav>
+
+<section class="cover">
+
+<div class="cover-text">
+
+<h1>Where Every Bite Explodes with Flavor!</h1>
+<p>Experience the ultimate burger sensation at Explosive Burger, home of the juiciest burgers in Lipa City!</p>
+
+<div class="button-group">
+  <a href="#menu" class="order-btn">Order Now</a>
+  <button class="details-btn" onclick="document.getElementById('menu-footer').scrollIntoView({behavior: 'smooth'})">More About Us</button>
+</div>
+
+
+</div>
+
+</section>
+
+<section id="menu">
+
+<div class="menu-navigator">
+<h2>Our Menu</h2>
+<div class="nav-right">
+<button class="menu-btn active" data-category="all" onclick="filterMenu('all')">All</button>
+<button class="menu-btn" data-category="burgers" onclick="filterMenu('burgers')">Burgers</button>
+<button class="menu-btn" data-category="wings" onclick="filterMenu('wings')">Wings</button>
+<button class="menu-btn" data-category="drinks" onclick="filterMenu('drinks')">Drinks</button>
+</div>
+
+</div>
+
+<div class="menu-section" data-category="burgers">
+
+<h3>Burgers</h3>
+
+<div class="products" id="burgersContainer">
+  <div class="card">
+    <img src="menu_pics/banahaw_burger.jpg" alt="Banahaw Burger" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Banahaw Burger</h3>
+      <p>Buns, Cheese sauce, Grilled Patty, Honey mustard, Ketchup, Cucumber, Tomato, White onion, Lettuce.</p>
+      <div class="card-footer">
+        <span class="price">₱170.00</span>
+        <button onclick="addToCart('Banahaw Burger', 170, 'menu_pics/banahaw_burger.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/mt.apo_burger.jpg" alt="Mt. Apo Burger" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Mt. Apo Burger</h3>
+      <p>Buns, Bacon, Cheese sauce, Grilled Patty, Cheese slice, Honey mustard, Ketchup, Cucumber, Tomato, White onion, Lettuce.</p>
+      <div class="card-footer">
+        <span class="price">₱239.00</span>
+        <button onclick="addToCart('Mt. Apo Burger', 239, 'menu_pics/mt.apo_burger.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/kanlaon_burger.jpg" alt="Kanlaon Burger" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Kanlaon Burger</h3>
+      <p>Buns, Barbeque sauce, Cheese Sauce, Bacon, Grilled Patty, Honey mustard, Ketchup, Cucumber, Tomato, White onion, Lettuce.</p>
+      <div class="card-footer">
+        <span class="price">₱128.00</span>
+        <button onclick="addToCart('Kanlaon Burger', 128, 'menu_pics/kanlaon_burger.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/pinatubo_burger.jpg" alt="Pinatubo Burger" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Pinatubo Burger</h3>
+      <p>Buns, Sliced Cheese, Cheese sauce, Grilled Patty, Honey mustard, Ketchup, Cucumber, Tomato, White onion, Lettuce.</p>
+      <div class="card-footer">
+        <span class="price">₱108.00</span>
+        <button onclick="addToCart('Pinatubo Burger', 108, 'menu_pics/pinatubo_burger.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/mayon_burger.jpg" alt="Mayon Burger" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Mayon Burger</h3>
+      <p>Buns, Cheese sauce, Grilled Patty, Honey mustard, Ketchup, Cucumber, Tomato, White onion, Lettuce.</p>
+      <div class="card-footer">
+        <span class="price">₱219.00</span>
+        <button onclick="addToCart('Mayon Burger', 219, 'menu_pics/mayon_burger.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="menu-section" data-category="wings">
+
+<h3>Wings</h3>
+
+<div class="products" id="wingsContainer">
+  <div class="card">
+    <img src="menu_pics/4wings.jpg" alt="Buffalo Wings" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Buffalo Wings with Rice</h3>
+      <p>Crispy Buffalo wings served with steamed rice.</p>
+      <div class="card-footer">
+        <span class="price">₱139.00</span>
+        <button onclick="addToCart('Buffalo Wings with Rice', 139, 'menu_pics/4wings.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/20wings.jpg" alt="Garlic Parmesan Wings" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Garlic Parmesan Wings</h3>
+      <p> 20 pcs Garlic Parmesan Crispy wings .</p>
+      <div class="card-footer">
+        <span class="price">₱589.00</span>
+        <button onclick="addToCart('Garlic Parmesan Wings', 589, 'menu_pics/20wings.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/20.wings.jpg" alt="Buffalo Wings" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Buffalo Wings</h3>
+      <p> 20 pcs Delicous Buffalo Crispy wings .</p>
+      <div class="card-footer">
+        <span class="price">₱589.00</span>
+        <button onclick="addToCart('Buffalo Wings', 589, 'menu_pics/20.wings.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/65wings.jpg" alt="Assorted Wings" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Assorted Wings</h3>
+      <p>Bilao of Assorted wings: Garlic Parmesan, Buffalo, Original & BBQ.</p>
+      <div class="card-footer">
+        <span class="price">₱1799.00</span>
+        <button onclick="addToCart('Assorted Wings', 1799, 'menu_pics/65wings.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="menu-section" data-category="drinks">
+
+<h3>Beverages</h3>
+
+<div class="products" id="drinksContainer">
+  <div class="card">
+    <img src="menu_pics/water.jpg" alt="Water" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Water</h3>
+      <p>Mineral Water.</p>
+      <div class="card-footer">
+        <span class="price">₱25.00</span>
+        <button onclick="addToCart('water', 25, 'menu_pics/water.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/mountain_dew.jpg" alt="Mountain Dew" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Mountain Dew</h3>
+      <p>Refreshing Mountain Dew.</p>
+      <div class="card-footer">
+        <span class="price">₱30.00</span>
+        <button onclick="addToCart('Mountain Dew', 30, 'menu_pics/mountain_dew.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/blue_lemonade.jpg" alt="Blue Lemonade" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Blue Lemonade</h3>
+      <p>A cold, sweet and tangy drink.</p>
+      <div class="card-footer">
+        <span class="price">₱55.00</span>
+        <button onclick="addToCart('Blue Lemonade', 55, 'menu_pics/blue_lemonade.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/cucumber_lemonade.jpg" alt="Cucumber Lemonade" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Cucumber Lemonade</h3>
+      <p>A smooth and refreshing mix of cucumber and lemonade.</p>
+      <div class="card-footer">
+        <span class="price">₱55.00</span>
+        <button onclick="addToCart('Cucumber Lemonade', 55, 'menu_pics/cucumber_lemonade.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="menu_pics/red_icedtea.jpg" alt="Red Iced Tea" onerror="this.src='menu_pics/default.jpg'">
+    <div class="card-content">
+      <h3>Red Iced Tea</h3>
+      <p>A splash of red, a whole lot of refreshment.</p>
+      <div class="card-footer">
+        <span class="price">₱60.00</span>
+        <button onclick="addToCart('Red Iced Tea', 60, 'menu_pics/red_icedtea.jpg')">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="menu-footer" id="menu-footer">
+  <div class="footer-container">
+    <div class="footer-row">
+      <div class="footer-section footer-location-section">
+        <h3>📍 Location & Hours</h3>
+        <div class="footer-details">
+          <p><strong class="footer-contact">Explosive Burger</strong></p>
+          <p>Mataas na lupa, Lipa City, Batangas</p>
+          <p><strong>Operating Hours:</strong><br>Monday - Sunday<br>10:00 AM - 5:00 PM</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-section footer-contact-section">
+      <h3>📞 Contact Us</h3>
+      <div class="footer-details">
+        <p><strong class="footer-contact">Phone:</strong><br><a href="tel:+639664591530">+63 (966) 459 1530</a></p>
+        <p><strong class="footer-contact">Email:</strong><br><a href="mailto:explosivelipa.19gmail.com">explosivelipa.19gmail.com</a></p>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>👍 Follow Us</h3>
+      <div class="footer-details">
+        <p><strong class="footer-contact">Facebook:</strong><br><a href="https://www.facebook.com/explosiveburger" target="_blank">@ExplosiveBurger</a></p>
+        <p>Like us on Facebook for updates, promos, and menu specials!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 Explosive Burger. All rights reserved. | Serving the juiciest burgers in Lipa City!</p>
+  </div>
+</footer>
+
+<div id="cartSidebar" class="cart-sidebar">
+
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="close-btn" onclick="closeCart()">×</button>
+  </div>
+
+  <div class="cart-items" id="cartItems"></div>
+
+  <div class="cart-total">
+    <p>Total: ₱<span id="total">0</span></p>
+  </div>
+
+  <div class="checkout-form">
+    <h3>Checkout</h3>
+    <form id="checkoutForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="text" id="address" placeholder="Complete Address" required>
+      <input type="tel" id="contact" placeholder="Contact Number" required>
+      <select id="paymentMethod" required>
+        <option value="">Select Payment</option>
+        <option value="cod">Cash on Delivery</option>
+        <option value="gcash">GCash</option>
+        <option value="card">Credit Card</option>
+      </select>
+      <div id="cardDetails" style="display:none;">
+        <input type="text" placeholder="Card Number" id="cardNumber">
+        <input type="text" placeholder="Expiry Date (MM/YY)" id="expiry">
+        <input type="text" placeholder="CVV" id="cvv">
+      </div>
+      <button type="submit" class="checkout-btn">Place Order</button>
+    </form>
+  </div>
+
+  <div id="loading" class="loading-screen">
+    <div class="loader">
+      <div class="burger">
+        <div class="bun top"></div>
+        <div class="patty"></div>
+        <div class="bun bottom"></div>
+      </div>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+      }, 2000);
+    });
+
+    // Handle checkout form submission
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Get form values
+      const fullName = document.getElementById('fullName').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const paymentMethod = document.getElementById('paymentMethod').value;
+
+      // Validate all fields
+      if (!fullName || !address || !contact || !paymentMethod) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      // Validate card details if card payment is selected
+      if (paymentMethod === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value.trim();
+        const expiry = document.getElementById('expiry').value.trim();
+        const cvv = document.getElementById('cvv').value.trim();
+        if (!cardNumber || !expiry || !cvv) {
+          alert('Please fill in all card details');
+          return;
+        }
+      }
+
+      // Get cart items
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+      }
+
+      // Calculate total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      // Generate unique order ID
+      const orderId = 'ORD-' + Date.now().toString().slice(-10);
+
+      // Create order object
+      const order = {
+        id: orderId,
+        items: cart,
+        total: total,
+        customer: {
+          name: fullName,
+          address: address,
+          contact: contact,
+          payment: paymentMethod
+        },
+        status: 'Pending',
+        date: new Date().toISOString()
+      };
+
+      // Save order to localStorage
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+
+      // Save order ID for delivery page
+      localStorage.setItem('lastOrderId', orderId);
+
+      // Clear cart
+      localStorage.removeItem('cart');
+
+      // Show loading screen
+      document.getElementById('loading').style.display = 'flex';
+
+      // Redirect to delivery partners page after 1 second
+      setTimeout(function() {
+        window.location.href = 'track.html';
+      }, 1000);
+    });
+
+    // Handle payment method change
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+      const cardDetails = document.getElementById('cardDetails');
+      if (this.value === 'card') {
+        cardDetails.style.display = 'block';
+      } else {
+        cardDetails.style.display = 'none';
+      }
+    });
+
+  function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('open');
+    
+    // Add hamburger animation
+    const hamburger = document.querySelector('.hamburger');
+    hamburger.classList.remove('click-animate');
+    void hamburger.offsetWidth; // Trigger reflow
+    hamburger.classList.add('click-animate');
+  }
+
+  // Add click animations to navbar elements
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add logo click animation
+    const logo = document.querySelector('.navbar .logo');
+    if (logo) {
+      logo.addEventListener('click', function() {
+        this.classList.remove('click-animate');
+        void this.offsetWidth; // Trigger reflow
+        this.classList.add('click-animate');
+      });
+    }
+
+    // Add animation to nav links
+    const navLinks = document.querySelectorAll('.navbar a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        // Add button press animation
+        this.classList.remove('click-animate');
+        void this.offsetWidth; // Trigger reflow
+        this.classList.add('click-animate');
+        
+        // Create ripple effect
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        
+        this.appendChild(ripple);
+        
+        // Remove ripple after animation
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    // Add animation to cart button
+    const cartButton = document.querySelector('.cart-icon');
+    if (cartButton) {
+      cartButton.addEventListener('click', function(e) {
+        // Add pulse animation
+        this.classList.remove('click-animate');
+        void this.offsetWidth; // Trigger reflow
+        this.classList.add('click-animate');
+        
+        // Create ripple effect
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        
+        this.appendChild(ripple);
+        
+        // Remove ripple after animation
+        setTimeout(() => ripple.remove(), 600);
+      });
+    }
+
+    // Scroll Animation Observer - Enhanced
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe menu section and cards
+    const menuSection = document.getElementById('menu');
+    if (menuSection) scrollObserver.observe(menuSection);
+
+    // Observe all cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => scrollObserver.observe(card));
+
+    // Observe footer
+    const footer = document.querySelector('.menu-footer');
+    if (footer) scrollObserver.observe(footer);
+
+    // Observe footer sections
+    const footerSections = document.querySelectorAll('.footer-section');
+    footerSections.forEach(section => scrollObserver.observe(section));
+
+    // Observe menu headings
+    const menuHeadings = document.querySelectorAll('#menu h2, #menu h3');
+    menuHeadings.forEach(heading => scrollObserver.observe(heading));
+  });
+
+</script>
+
+</body>
+
+</html>

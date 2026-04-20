@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Test Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ff4757;
+    }
+    button {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #e83e50;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard Test & Setup</h1>
+    <p>Click buttons below to populate the dashboard with test data:</p>
+    
+    <button onclick="addTestOrders()">Add Test Orders</button>
+    <button onclick="addTestProducts()">Add Test Products</button>
+    <button onclick="addTestInventory()">Add Test Inventory</button>
+    <button onclick="clearAllData()">Clear All Data</button>
+    <button onclick="goToDashboard()">Go to Dashboard</button>
+    
+    <div id="status"></div>
+  </div>
+
+  <script>
+    function addTestOrders() {
+      const testOrders = [
+        {
+          id: "ORD001",
+          customer: { name: "John Doe" },
+          items: [{ name: "Cheese Burger", qty: 2 }, { name: "Fries", qty: 1 }],
+          total: 300,
+          status: "Pending"
+        },
+        {
+          id: "ORD002",
+          customer: { name: "Jane Smith" },
+          items: [{ name: "Buffalo Wings", qty: 3 }, { name: "Coke", qty: 2 }],
+          total: 450,
+          status: "Preparing"
+        },
+        {
+          id: "ORD003",
+          customer: { name: "Mike Johnson" },
+          items: [{ name: "Mayon Burger", qty: 1 }, { name: "Sprite", qty: 1 }],
+          total: 220,
+          status: "Ready"
+        }
+      ];
+      
+      localStorage.setItem("orders", JSON.stringify(testOrders));
+      showStatus("✓ Test orders added successfully!", false);
+    }
+
+    function addTestProducts() {
+      const today = new Date();
+      const testProducts = [
+        {
+          id: 1,
+          name: "Cheese Burger",
+          price: 120,
+          expiryDate: new Date(today.getTime() + 45 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          createdAt: today.toLocaleDateString()
+        },
+        {
+          id: 2,
+          name: "Buffalo Wings",
+          price: 100,
+          expiryDate: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          createdAt: today.toLocaleDateString()
+        },
+        {
+          id: 3,
+          name: "Spicy Wings",
+          price: 190,
+          expiryDate: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          createdAt: today.toLocaleDateString()
+        },
+        {
+          id: 4,
+          name: "Fries",
+          price: 60,
+          expiryDate: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          createdAt: today.toLocaleDateString()
+        }
+      ];
+      
+      localStorage.setItem("products", JSON.stringify(testProducts));
+      showStatus("✓ Test products added successfully! (Includes expiring and expired items)", false);
+    }
+
+    function addTestInventory() {
+      const testInventory = [
+        { id: 1, ingredient: "Beef Patty", stock: 50, unit: "pcs", addedAt: new Date().toLocaleDateString() },
+        { id: 2, ingredient: "Cheese Slices", stock: 100, unit: "pcs", addedAt: new Date().toLocaleDateString() },
+        { id: 3, ingredient: "Lettuce", stock: 3, unit: "kg", addedAt: new Date().toLocaleDateString() },
+        { id: 4, ingredient: "Tomato", stock: 0, unit: "kg", addedAt: new Date().toLocaleDateString() },
+        { id: 5, ingredient: "Chicken Wings", stock: 25, unit: "kg", addedAt: new Date().toLocaleDateString() }
+      ];
+      
+      localStorage.setItem("inventory", JSON.stringify(testInventory));
+      showStatus("✓ Test inventory added successfully! (Includes low stock and out of stock items)", false);
+    }
+
+    function clearAllData() {
+      if (confirm("Are you sure you want to clear all dashboard data?")) {
+        localStorage.removeItem("orders");
+        localStorage.removeItem("products");
+        localStorage.removeItem("inventory");
+        showStatus("✓ All data cleared successfully!", false);
+      }
+    }
+
+    function goToDashboard() {
+      window.location.href = "pages/dashboard.html";
+    }
+
+    function showStatus(message, isError) {
+      const statusDiv = document.getElementById("status");
+      statusDiv.innerText = message;
+      statusDiv.className = isError ? "status error" : "status";
+      setTimeout(() => {
+        statusDiv.innerText = "";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

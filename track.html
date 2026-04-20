@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Partners - Explosive Burger</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <img src="logo.jpg" alt="Explosive Burger Logo" class="logo">
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <ul id="nav-menu">
+      <li><a href="index.html"> Home</a></li>
+      <li><a href="index.html#menu">🍔 Menu</a></li>
+      <li><a href="login.html">🔐 Admin</a></li>
+    </ul>
+  </nav>
+
+  <section class="delivery-section">
+    <div class="delivery-container">
+      <div class="progress-container">
+        <div class="progress-step completed">
+          <div class="step-number">1</div>
+          <div class="step-text">Place Order</div>
+        </div>
+        <div class="progress-line completed"></div>
+        <div class="progress-step active">
+          <div class="step-number">2</div>
+          <div class="step-text">Select Delivery</div>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+          <div class="step-number">3</div>
+          <div class="step-text">Track Order</div>
+        </div>
+      </div>
+      <div class="delivery-header">
+        <div class="success-icon-large">✅</div>
+        <h1>Order Placed Successfully!</h1>
+        <p class="order-id">Order ID: <span id="displayOrderId">-</span></p>
+        <p class="step-indicator">Choose your delivery partner below</p>
+      </div>
+      <div class="section-title">
+        <h2>Choose Your Delivery Partner</h2>
+        <p>Select a reliable delivery service to get your order</p>
+      </div>
+      <div class="delivery-select-area">
+        <div class="delivery-card" id="card-foodpanda" onclick="selectDeliveryCard('Foodpanda')">
+          <div class="card-header">
+            <div class="partner-icon"><img src="foodpanda-logo.webp" alt="Foodpanda"></div>
+            <div class="selection-indicator" id="indicator-foodpanda">
+              <span class="checkmark">✓</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Foodpanda</h3>
+            <p class="partner-desc">Fast, reliable delivery across the city</p>
+            <ul class="partner-features">
+              <li>⚡ Quick Delivery</li>
+              <li>📱 Easy to Use</li>
+            </ul>
+          </div>
+        </div>
+        <div class="delivery-card" id="card-grab" onclick="selectDeliveryCard('Grab')">
+          <div class="card-header">
+            <div class="partner-icon"><img src="grab-logo.png" alt="Grab"></div>
+            <div class="selection-indicator" id="indicator-grab">
+              <span class="checkmark">✓</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Grab</h3>
+            <p class="partner-desc">GrabFood - Convenient food delivery</p>
+            <ul class="partner-features">
+              <li>🎯 Accurate Tracking</li>
+              <li>💳 Multiple Payment Options</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="select-action-row">
+        <button id="confirmDeliveryBtn" class="delivery-btn btn-primary" style="max-width:320px;display:none;margin:0 auto;">Confirm Selection</button>
+      </div>
+      <footer class="page-footer">
+        <div class="footer-content">
+          <div class="store-details">
+            <h3>Store Information</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-icon">📍</span>
+                <div>
+                  <strong>Location</strong><br>
+                  Mataas na lupa, Lipa City, Batangas
+                </div>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">🕒</span>
+                <div>
+                  <strong>Operating Hours</strong><br>
+                  Monday - Sunday: 10:00 AM - 5:00 PM
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="delivery-note">
+            <h4>Important Note</h4>
+            <p>Save your Order ID for tracking. Both Foodpanda and Grab offer safe, contactless delivery. The delivery partner will contact you shortly to confirm your order.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <script>
+    // Display the order ID that was just placed
+    document.addEventListener('DOMContentLoaded', function() {
+      const orderId = localStorage.getItem('lastOrderId');
+      if (orderId) {
+        document.getElementById('displayOrderId').textContent = orderId;
+      }
+
+      // Selection logic
+      let selected = null;
+      const foodpandaCard = document.getElementById('card-foodpanda');
+      const grabCard = document.getElementById('card-grab');
+      const indicatorFoodpanda = document.getElementById('indicator-foodpanda');
+      const indicatorGrab = document.getElementById('indicator-grab');
+      const confirmBtn = document.getElementById('confirmDeliveryBtn');
+
+      function updateSelection(partner) {
+        selected = partner;
+        if (partner === 'Foodpanda') {
+          foodpandaCard.classList.add('selected');
+          grabCard.classList.remove('selected');
+          indicatorFoodpanda.classList.add('visible');
+          indicatorGrab.classList.remove('visible');
+        } else {
+          grabCard.classList.add('selected');
+          foodpandaCard.classList.remove('selected');
+          indicatorGrab.classList.add('visible');
+          indicatorFoodpanda.classList.remove('visible');
+        }
+        confirmBtn.style.display = 'block';
+      }
+
+      window.selectDeliveryCard = function(partner) {
+        updateSelection(partner);
+      };
+
+      confirmBtn.onclick = function() {
+        if (!selected) return;
+        localStorage.setItem('deliveryPartner', selected);
+        showSuccessModal(selected, orderId);
+      };
+    });
+
+    // Show success modal
+    function showSuccessModal(partner, orderId) {
+      // Get the last order details
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const lastOrder = orders[orders.length - 1];
+      
+      let orderItems = '';
+      if (lastOrder && lastOrder.items) {
+        orderItems = lastOrder.items.map(item => `${item.name} x${item.qty} - ₱${item.price * item.qty}`).join('<br>');
+      }
+      
+      // Create modal overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'success-overlay';
+      
+      const modal = document.createElement('div');
+      modal.className = 'success-modal';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="success-icon">✅</div>
+          <h2>Order Confirmed!</h2>
+          <p class="success-message">Your order has been successfully placed with <strong>${partner}</strong></p>
+          <div class="order-summary">
+            <h3>Order Details</h3>
+            <p><strong>Order ID:</strong> ${orderId}</p>
+            <p><strong>Delivery via:</strong> ${partner}</p>
+            <p><strong>Customer Name:</strong> ${lastOrder ? lastOrder.customer.name : 'N/A'}</p>
+            <p><strong>Contact Number:</strong> ${lastOrder ? lastOrder.customer.contact : 'N/A'}</p>
+            <p><strong>Payment Method:</strong> ${lastOrder ? lastOrder.customer.payment.toUpperCase() : 'N/A'}</p>
+            <p><strong>Order Items:</strong><br>${orderItems}</p>
+            <p><strong>Total Amount:</strong> ₱${lastOrder ? lastOrder.total : '0'}</p>
+            <p class="info-text">The delivery partner will contact you shortly to confirm your order.</p>
+          </div>
+          <button class="confirm-btn" onclick="goHome()">Continue Shopping</button>
+        </div>
+      `;
+      
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+      
+      // Animation
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 10);
+    }
+
+    // Redirect to home
+    function goHome() {
+      localStorage.removeItem('lastOrderId');
+      localStorage.removeItem('deliveryPartner');
+      window.location.href = 'index.html';
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('nav-menu');
+      menu.classList.toggle('open');
+    }
+  </script>
+
+  <style>
+    .delivery-section {
+      background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+      min-height: calc(100vh - 80px);
+      padding: 80px 20px 60px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .delivery-container {
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.completed .step-number {
+      background: #ff4757;
+      color: white;
+    }
+
+    .progress-step.active .step-number {
+      background: #ff4757;
+      color: white;
+      box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.2);
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .progress-step.completed .step-text {
+      color: #ff4757;
+    }
+
+    .progress-step.active .step-text {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .progress-line {
+      height: 2px;
+      background: #e0e0e0;
+      flex: 1;
+      margin: 0 20px;
+      position: relative;
+      top: -20px;
+    }
+
+    .progress-line.completed {
+      background: #ff4757;
+    }
+
+    .delivery-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .success-icon-large {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: block;
+      animation: bounceIn 0.6s ease;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .delivery-header h1 {
+      font-size: 42px;
+      color: #1a1a1a;
+      margin: 0 0 15px 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .order-id {
+      font-size: 18px;
+      color: #333;
+      margin: 0 0 20px 0;
+      font-weight: 400;
+    }
+
+    .order-id span {
+      color: #ff4757;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .step-indicator {
+      font-size: 16px;
+      color: #ff4757;
+      margin: 0;
+      font-weight: 600;
+      background: #fff8f8;
+      padding: 10px 20px;
+      border-radius: 25px;
+      display: inline-block;
+      border: 1px solid #ffeaea;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+      color: #1a1a1a;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+    }
+
+    .section-title p {
+      font-size: 16px;
+      color: #555;
+      margin: 0;
+      font-weight: 400;
+    }
+
+
+    .delivery-select-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .delivery-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 2px solid #f0f0f0;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+    }
+
+    .delivery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      border-color: #ff4757;
+    }
+
+    .delivery-card.selected {
+      border-color: #ff4757;
+      box-shadow: 0 8px 30px rgba(255, 71, 87, 0.2);
+      background: linear-gradient(135deg, #fff 0%, #fff8f8 100%);
+    }
+
+    .card-header {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .partner-icon img {
+      width: 100%;
+      height: auto;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .selection-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .selection-indicator.visible {
+      opacity: 1;
+      background: #ff4757;
+    }
+
+    .checkmark {
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .card-body h3 {
+      color: #1a1a1a;
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .partner-desc {
+      color: #666;
+      margin: 0 0 20px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .partner-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .partner-features li {
+      color: #555;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .delivery-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 71, 87, 0.25);
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .delivery-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+    }
+
+    .delivery-btn:active {
+      transform: translateY(0);
+    }
+
+    .page-footer {
+      margin-top: 60px;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .store-details h3 {
+      color: #1a1a1a;
+      font-size: 20px;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .detail-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .detail-item strong {
+      color: #ff4757;
+      font-weight: 600;
+    }
+
+    .detail-item div {
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .delivery-note h4 {
+      color: #1a1a1a;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+      font-weight: 600;
+    }
+
+    .delivery-note p {
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .delivery-header h1 {
+        font-size: 32px;
+      }
+
+      .delivery-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .store-info-box {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .info-divider {
+        display: none;
+      }
+
+      .delivery-section {
+        padding: 60px 20px;
+      }
+
+      .progress-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .progress-line {
+        width: 2px;
+        height: 40px;
+        margin: 0 auto;
+        top: 0;
+      }
+
+      .section-title h2 {
+        font-size: 24px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .delivery-select-area {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .delivery-card {
+        padding: 20px;
+      }
+
+      .partner-icon img {
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+      }
+    }
+
+    /* SUCCESS MODAL */
+    .success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .success-overlay.show {
+      opacity: 1;
+    }
+
+    .success-modal {
+      background: white;
+      border-radius: 16px;
+      padding: 50px 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .success-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .success-modal h2 {
+      color: #1a1a1a;
+      font-size: 32px;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+    }
+
+    .success-message {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    .order-summary {
+      background: #f5f5f5;
+      border-left: 4px solid #ff4757;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+
+    .order-summary p {
+      margin: 10px 0;
+      color: #333;
+      font-size: 15px;
+    }
+
+    .order-summary strong {
+      color: #ff4757;
+      font-weight: 600;
+    }
+
+    .info-text {
+      color: #888;
+      font-size: 14px;
+      font-style: italic;
+      margin-top: 15px;
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+    }
+
+    .confirm-btn {
+      background: linear-gradient(135deg, #ff4757, #ff3742);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    }
+
+    .confirm-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+    }
+
+    .delivery-card {
+      cursor: pointer;
+    }
+  </style>
+</body>
+</html>

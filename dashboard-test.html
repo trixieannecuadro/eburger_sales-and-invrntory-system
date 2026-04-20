@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard Test</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; }
+    button { padding: 10px 20px; background: #ff4757; color: white; border: none; cursor: pointer; margin: 10px 5px 10px 0; border-radius: 5px; font-weight: bold; }
+    button:hover { background: #e83e50; }
+    .result { padding: 15px; margin: 15px 0; border-radius: 5px; background: #e8f5e9; color: #2e7d32; }
+    .error { background: #ffebee; color: #c62828; }
+    pre { background: #f5f5f5; padding: 15px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard Data Check</h1>
+    <button onclick="checkData()">Check Stored Data</button>
+    <button onclick="clearData()">Clear All Data</button>
+    <button onclick="addTestData()">Add Test Data</button>
+    <button onclick="reloadDashboard()">Reload Dashboard</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function checkData() {
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+      
+      const orders = localStorage.getItem('orders');
+      const products = localStorage.getItem('products');
+      const inventory = localStorage.getItem('inventory');
+      
+      let html = '<div class="result">';
+      html += '<strong>Orders:</strong> ' + (orders ? JSON.parse(orders).length + ' found' : 'EMPTY') + '<br>';
+      html += '<strong>Products:</strong> ' + (products ? JSON.parse(products).length + ' found' : 'EMPTY') + '<br>';
+      html += '<strong>Inventory:</strong> ' + (inventory ? JSON.parse(inventory).length + ' found' : 'EMPTY') + '<br><br>';
+      
+      if (orders) {
+        html += '<strong>Orders Data:</strong><pre>' + JSON.stringify(JSON.parse(orders), null, 2) + '</pre>';
+      }
+      if (products) {
+        html += '<strong>Products Data:</strong><pre>' + JSON.stringify(JSON.parse(products), null, 2) + '</pre>';
+      }
+      
+      output.innerHTML = html + '</div>';
+    }
+    
+    function clearData() {
+      localStorage.removeItem('orders');
+      localStorage.removeItem('products');
+      localStorage.removeItem('inventory');
+      document.getElementById('output').innerHTML = '<div class="result">✓ All data cleared!</div>';
+    }
+    
+    function addTestData() {
+      const today = new Date();
+      
+      const testOrders = [
+        { id: "ORD001", customer: { name: "John Doe" }, items: [{ name: "Cheese Burger", qty: 2 }], total: 300, status: "Pending" },
+        { id: "ORD002", customer: { name: "Jane Smith" }, items: [{ name: "Wings", qty: 3 }], total: 450, status: "Preparing" },
+        { id: "ORD003", customer: { name: "Mike Johnson" }, items: [{ name: "Burger", qty: 1 }], total: 220, status: "Ready" }
+      ];
+      
+      const testProducts = [
+        { id: 1, name: "Cheese Burger", price: 120, expiryDate: new Date(today.getTime() + 45 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] },
+        { id: 2, name: "Buffalo Wings", price: 100, expiryDate: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] },
+        { id: 3, name: "Spicy Wings", price: 190, expiryDate: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] }
+      ];
+      
+      const testInventory = [
+        { id: 1, ingredient: "Beef Patty", stock: 50, unit: "pcs" },
+        { id: 2, ingredient: "Cheese", stock: 100, unit: "pcs" },
+        { id: 3, ingredient: "Lettuce", stock: 3, unit: "kg" }
+      ];
+      
+      localStorage.setItem('orders', JSON.stringify(testOrders));
+      localStorage.setItem('products', JSON.stringify(testProducts));
+      localStorage.setItem('inventory', JSON.stringify(testInventory));
+      
+      document.getElementById('output').innerHTML = '<div class="result">✓ Test data added! Now reload the main dashboard.</div>';
+    }
+    
+    function reloadDashboard() {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>
